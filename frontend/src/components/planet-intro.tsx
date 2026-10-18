@@ -3,19 +3,20 @@
 import { useEffect, useRef, useState } from 'react'
 
 // Lightweight vector globe: no video, external requests, or 3D dependencies.
-export default function PlanetIntro() {
+export default function PlanetIntro({ onComplete }: { onComplete: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (reduced.matches) return
+    if (reduced.matches) { onComplete(); return }
     setVisible(true)
-    const timer = window.setTimeout(() => setVisible(false), 2600)
-    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') setVisible(false) }
+    const finish = () => { setVisible(false); onComplete() }
+    const timer = window.setTimeout(finish, 2600)
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') finish() }
     window.addEventListener('keydown', escape)
     return () => { clearTimeout(timer); window.removeEventListener('keydown', escape) }
-  }, [])
+  }, [onComplete])
 
   useEffect(() => {
     if (!visible) return
@@ -78,7 +79,7 @@ export default function PlanetIntro() {
 
   if (!visible) return null
   return <div className="jv-intro-overlay" role="region" aria-label="Abertura JV Sistemas">
-    <button type="button" className="jv-intro-skip" onClick={() => setVisible(false)}>Pular abertura ↗</button>
+    <button type="button" className="jv-intro-skip" onClick={() => { setVisible(false); onComplete() }}>Pular abertura ↗</button>
     <div className="jv-intro-content"><span className="jv-intro-caption">TECNOLOGIA QUE CONECTA POSSIBILIDADES</span>
       <canvas ref={canvasRef} aria-hidden="true" />
       <div className="jv-intro-brand"><img src="/jv-sistemas-mark-transparent.png" alt="" /><span>JV SISTEMAS<small>& TECNOLOGIA</small></span></div>

@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ArrowRight, ArrowUpRight, Instagram, Menu, X } from 'lucide-react'
 import './public-site.css'
 import PlanetIntro from '@/components/planet-intro'
+import BuildText from '@/components/build-text'
 
 const featureOptions = [
   { id: 'mobile', label: 'Aplicativo mobile', value: 400 },
@@ -35,14 +36,23 @@ const urgencyLabels: Record<string, string> = {
 }
 
 export default function Home() {
+  const [heroPhase, setHeroPhase] = useState<'static' | 'waiting' | 'running'>('static')
+  const startHero = useCallback(() => setHeroPhase('running'), [])
+  useEffect(() => { setHeroPhase(current => current === 'static' ? 'waiting' : current) }, [])
   const [quoteStep, setQuoteStep] = useState(1)
   const [menuOpen, setMenuOpen] = useState(false)
   const [lineCount, setLineCount] = useState(0)
   useEffect(() => {
+    if (heroPhase !== 'running') return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setLineCount(6); return }
-    const timer = window.setInterval(() => setLineCount(current => Math.min(current + 1, 6)), 650)
+    let count = 0
+    const timer = window.setInterval(() => {
+      count += 1
+      setLineCount(count)
+      if (count === 6) window.clearInterval(timer)
+    }, 650)
     return () => window.clearInterval(timer)
-  }, [])
+  }, [heroPhase])
   const [form, setForm] = useState({
     name: '',
     companyName: '',
@@ -121,8 +131,8 @@ export default function Home() {
   }
 
   return (
-    <main className="jv-public">
-      <PlanetIntro />
+    <main className="jv-public" data-hero-phase={heroPhase}>
+      <PlanetIntro onComplete={startHero} />
       <header className="jv-header">
         <Link href="/" className="jv-brand" aria-label="JV Sistemas & Tecnologia — início"><img src="/jv-sistemas-mark-transparent.png" alt="" /><span>JV SISTEMAS<small>& TECNOLOGIA</small></span></Link>
         <button className="jv-menu" type="button" aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'} aria-expanded={menuOpen} aria-controls="public-navigation" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
@@ -132,9 +142,9 @@ export default function Home() {
       </header>
       <section className="jv-hero">
         <div className="jv-grid-art" aria-hidden="true"><span>01 / ENGINEERING</span><span>JV_SYSTEMS :: BUILDING</span></div>
-        <div className="jv-hero-copy"><p className="jv-eyebrow"><i/> SOFTWARE SOB MEDIDA. NEGÓCIOS EM MOVIMENTO.</p>
-          <h1>Seu próximo<br/>nível começa<br/>com <em>código.</em><span className="jv-cursor" aria-hidden="true">_</span></h1>
-          <p className="jv-intro">Transformamos processos complexos em sistemas que fazem sentido. Sites, aplicativos e software feitos para a realidade da sua empresa.</p>
+        <div className="jv-hero-copy"><p className="jv-eyebrow"><i/> <BuildText text="SOFTWARE SOB MEDIDA. NEGÓCIOS EM MOVIMENTO." speed={12} /></p>
+          <h1><BuildText text="Seu próximo" delay={650} speed={35}/><br/><BuildText text="nível começa" delay={1035} speed={35}/><br/><BuildText text="com " delay={1490} speed={35}/><em><BuildText text="código." delay={1630} speed={35}/></em><span className="jv-cursor" aria-hidden="true">_</span></h1>
+          <p className="jv-intro"><BuildText text="Transformamos processos complexos em sistemas que fazem sentido. Sites, aplicativos e software feitos para a realidade da sua empresa." delay={2100} speed={12}/></p>
           <a className="jv-button" href="#orcamento">Tirar meu projeto do papel <ArrowUpRight size={20}/></a>
         </div>
         <div className="jv-terminal" aria-label="Animação ilustrativa de desenvolvimento de software">
