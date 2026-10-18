@@ -1,24 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
-import {
-  ArrowRight,
-  BarChart3,
-  CheckCircle2,
-  Cloud,
-  Code2,
-  Headphones,
-  Instagram,
-  LifeBuoy,
-  Lock,
-  MonitorSmartphone,
-  PackageCheck,
-  Rocket,
-  ShieldCheck,
-  Sparkles,
-  Truck,
-} from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { ArrowRight, ArrowUpRight, Instagram, Menu, X } from 'lucide-react'
+import './public-site.css'
 
 const featureOptions = [
   { id: 'mobile', label: 'Aplicativo mobile', value: 3500 },
@@ -49,6 +34,13 @@ const urgencyLabels: Record<string, string> = {
 }
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [lineCount, setLineCount] = useState(0)
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setLineCount(6); return }
+    const timer = window.setInterval(() => setLineCount(current => Math.min(current + 1, 6)), 650)
+    return () => window.clearInterval(timer)
+  }, [])
   const [form, setForm] = useState({
     name: '',
     companyName: '',
@@ -61,42 +53,6 @@ export default function Home() {
   })
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
   const [quoteStatus, setQuoteStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
-
-  const services = [
-    {
-      icon: Truck,
-      title: 'Logistica e transportadoras',
-      description: 'Controle entregas, motoristas, veiculos, rotas e status em tempo real.',
-    },
-    {
-      icon: MonitorSmartphone,
-      title: 'Aplicativos sob medida',
-      description: 'Apps web e mobile pensados para sua operacao e para seus clientes.',
-    },
-    {
-      icon: BarChart3,
-      title: 'Sistemas completos',
-      description: 'Gestao financeira, estoque, vendas, clientes, usuarios e relatorios.',
-    },
-    {
-      icon: Code2,
-      title: 'Tudo com sua marca',
-      description: 'Sistema personalizado com identidade visual, logo e regras da empresa.',
-    },
-  ]
-
-  const pillars = [
-    { icon: ShieldCheck, title: '100% seguro', text: 'Dados protegidos e acesso por usuario.' },
-    { icon: Cloud, title: 'Acesso de onde estiver', text: 'Sistema online, pronto para o dia a dia.' },
-    { icon: Lock, title: 'Personalizado', text: 'Do seu jeito, com as regras da sua empresa.' },
-    { icon: Headphones, title: 'Suporte especializado', text: 'Atendimento proximo, rapido e humano.' },
-  ]
-
-  const workflow = [
-    'Entendemos sua operacao e os gargalos do dia a dia.',
-    'Desenhamos telas, regras e modulos com foco no seu negocio.',
-    'Entregamos, treinamos e acompanhamos a evolucao do sistema.',
-  ]
 
   const estimate = useMemo(() => {
     const project = projectTypes[form.projectType as keyof typeof projectTypes]
@@ -163,179 +119,45 @@ export default function Home() {
   }
 
   return (
-    <main className="site-page">
-      <section className="site-hero">
-        <nav className="site-nav" aria-label="Principal">
-          <Link href="/" className="site-brand">
-            <span className="site-brand-logo">
-              <img src="/jv-sistemas-mark-transparent.png" alt="JV Sistemas" />
-            </span>
-            <span className="site-brand-text">
-              <strong>JV Sistemas</strong>
-              <small>& Tecnologia</small>
-            </span>
-          </Link>
-          <div className="site-nav-actions">
-            <Link href="#solucoes" className="site-nav-link">
-              Solucoes
-            </Link>
-            <Link href="#orcamento" className="site-nav-link">
-              Orcamento
-            </Link>
-            <Link href="#suporte" className="site-nav-link">
-              Metodo
-            </Link>
-            <a
-              href="https://www.instagram.com/jvsistemas.br?igsh=MWFpMzY3dzcydXRqOA=="
-              className="site-nav-icon"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Instagram da JV Sistemas"
-            >
-              <Instagram size={18} aria-hidden="true" />
-            </a>
-          </div>
+    <main className="jv-public">
+      <header className="jv-header">
+        <Link href="/" className="jv-brand" aria-label="JV Sistemas & Tecnologia — início"><img src="/jv-sistemas-mark-transparent.png" alt="" /><span>JV SISTEMAS<small>& TECNOLOGIA</small></span></Link>
+        <button className="jv-menu" type="button" aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'} aria-expanded={menuOpen} aria-controls="public-navigation" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
+        <nav id="public-navigation" className={menuOpen ? 'is-open' : ''} aria-label="Navegação principal">
+          <a href="#solucoes" onClick={() => setMenuOpen(false)}>O que fazemos</a><a href="#metodo" onClick={() => setMenuOpen(false)}>Como trabalhamos</a><a className="jv-nav-contact" href="#orcamento" onClick={() => setMenuOpen(false)}>Vamos conversar <ArrowUpRight size={16}/></a>
         </nav>
-
-        <div className="site-hero-grid">
-          <div className="site-hero-copy">
-            <p className="site-kicker">
-              <Rocket size={18} aria-hidden="true" />
-              Tecnologia que transforma empresas
-            </p>
-            <h1>Sua empresa precisa de um sistema proprio?</h1>
-            <p className="site-hero-text">
-              Desenvolvemos sites, sistemas e aplicativos personalizados para qualquer tipo de
-              empresa, com painel de gestao, controle financeiro, vendas, estoque e atendimento.
-            </p>
-            <div className="site-hero-actions">
-              <Link className="site-primary-cta" href="#orcamento">
-                Simular orcamento
-                <ArrowRight size={18} aria-hidden="true" />
-              </Link>
-              <Link className="site-secondary-cta" href="#solucoes">
-                Ver solucoes
-              </Link>
-            </div>
-          </div>
-
-          <div className="site-product-visual" aria-label="Previa do sistema JV Sistemas">
-            <div className="site-laptop">
-              <div className="site-laptop-top">
-                <span />
-                <strong>Dashboard</strong>
-                <small>ao vivo</small>
-              </div>
-              <div className="site-stat-row">
-                <div>
-                  <span>Entregas hoje</span>
-                  <strong>128</strong>
-                </div>
-                <div>
-                  <span>Em andamento</span>
-                  <strong>73</strong>
-                </div>
-                <div>
-                  <span>Concluidas</span>
-                  <strong>55</strong>
-                </div>
-              </div>
-              <div className="site-dashboard-grid">
-                <div className="site-map-panel">
-                  <span className="site-route-point point-a" />
-                  <span className="site-route-point point-b" />
-                  <span className="site-route-point point-c" />
-                  <span className="site-route-line line-a" />
-                  <span className="site-route-line line-b" />
-                </div>
-                <div className="site-list-panel">
-                  {['Entrega #1256', 'Venda #4821', 'Cliente aprovado'].map((item) => (
-                    <div key={item}>
-                      <CheckCircle2 size={16} aria-hidden="true" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="site-phone">
-              <div className="site-phone-bar" />
-              <strong>Entrega #1256</strong>
-              <span>Em andamento</span>
-              <button type="button">Iniciar entrega</button>
-            </div>
-            <div className="site-truck-card">
-              <Truck size={34} aria-hidden="true" />
-              <span>Controle completo de rotas e operacoes</span>
-            </div>
-          </div>
+      </header>
+      <section className="jv-hero">
+        <div className="jv-grid-art" aria-hidden="true"><span>01 / ENGINEERING</span><span>JV_SYSTEMS :: BUILDING</span></div>
+        <div className="jv-hero-copy"><p className="jv-eyebrow"><i/> SOFTWARE SOB MEDIDA. NEGÓCIOS EM MOVIMENTO.</p>
+          <h1>Seu próximo<br/>nível começa<br/>com <em>código.</em><span className="jv-cursor" aria-hidden="true">_</span></h1>
+          <p className="jv-intro">Transformamos processos complexos em sistemas que fazem sentido. Sites, aplicativos e software feitos para a realidade da sua empresa.</p>
+          <a className="jv-button" href="#orcamento">Tirar meu projeto do papel <ArrowUpRight size={20}/></a>
         </div>
+        <div className="jv-terminal" aria-label="Animação ilustrativa de desenvolvimento de software">
+          <div className="jv-terminal-bar"><span><i/><i/><i/></span><span>jv / seu-proximo-projeto</span><span>⌘</span></div>
+          <div className="jv-terminal-body"><p className="jv-terminal-comment">// A sua operação. A nossa próxima linha de código.</p>
+            <pre><span className="jv-purple">const</span> projeto = {'{'}{'\n'}  empresa: <span className="jv-green">"a sua"</span>,{'\n'}  solução: <span className="jv-green">"sob medida"</span>,{'\n'}  possibilidades: <span className="jv-blue">Infinity</span>{'\n'}{'}'};</pre>
+            <div className="jv-terminal-output" aria-hidden="true">{['$ jv iniciar --projeto', '> Entendendo a sua operação...', '> Conectando processos e pessoas...', '> Desenvolvendo novas possibilidades...', 'OK Pronto para o próximo passo.', '$ vamos construir juntos_'].slice(0,lineCount).map((line,index)=><p className={index===4 ? 'jv-green' : ''} key={line}>{line}</p>)}</div>
+          </div><div className="jv-terminal-footer"><span><i/> CONCEITO DE DESENVOLVIMENTO</span><span>UTF-8 / BR</span></div>
+        </div>
+        <div className="jv-hero-bottom"><span>DESENVOLVIMENTO COM PROPÓSITO</span><a href="#solucoes">Explore as possibilidades ↓</a><span>MANAUS — BRASIL</span></div>
       </section>
-
-      <section id="solucoes" className="site-section">
-        <div className="site-section-heading">
-          <p className="site-kicker">Solucoes sob medida</p>
-          <h2>Sistema para sua empresa vender, atender e controlar melhor.</h2>
-        </div>
-        <div className="site-services">
-          {services.map((service) => {
-            const Icon = service.icon
-            return (
-              <article className="site-service-card" key={service.title}>
-                <span className="site-service-icon">
-                  <Icon size={25} aria-hidden="true" />
-                </span>
-                <h3>{service.title}</h3>
-                <p>{service.description}</p>
-              </article>
-            )
-          })}
-        </div>
+      <div className="jv-stack" aria-label="Áreas de atuação"><span>WEB DEVELOPMENT</span><b>/</b><span>SISTEMAS DE GESTÃO</span><b>/</b><span>APLICATIVOS</span><b>/</b><span>AUTOMAÇÃO</span></div>
+      <section className="jv-section" id="solucoes"><div className="jv-section-head"><p className="jv-eyebrow">01 — O QUE FAZEMOS</p><h2>Menos tarefas manuais.<br/><span>Mais espaço para crescer.</span></h2><p>Da presença digital ao controle da operação, desenvolvemos a tecnologia que acompanha o seu negócio.</p></div>
+        <div className="jv-service-list">{[
+          ['01','Sites & experiências digitais','Uma presença à altura da sua empresa. Sites institucionais, landing pages e lojas virtuais com identidade própria.','PRESENÇA DIGITAL'],
+          ['02','Sistemas que conectam sua empresa','Financeiro, vendas, estoque e clientes no mesmo fluxo. Regras e módulos desenhados para a sua operação.','GESTÃO & ERP'],
+          ['03','Aplicativos & integrações','Conecte sua equipe e seus clientes. Aplicações web e mobile, integrações entre ferramentas e automação de processos.','CONEXÃO & AUTOMAÇÃO'],
+          ['04','Tecnologia para logística','Controle de entregas, motoristas, veículos e rotas. Uma visão mais clara de cada etapa da operação.','LOGÍSTICA & TRANSPORTE']
+        ].map(([number,title,description,tag])=><a href="#orcamento" className="jv-service" key={number}><span className="jv-service-number">/{number}</span><div><span className="jv-service-tag">{tag}</span><h3>{title}</h3><p>{description}</p></div><ArrowUpRight aria-hidden="true"/></a>)}</div>
       </section>
-
-      <section className="site-trust-band" aria-label="Diferenciais">
-        {pillars.map((pillar) => {
-          const Icon = pillar.icon
-          return (
-            <div className="site-pillar" key={pillar.title}>
-              <Icon size={28} aria-hidden="true" />
-              <div>
-                <strong>{pillar.title}</strong>
-                <span>{pillar.text}</span>
-              </div>
-            </div>
-          )
-        })}
-      </section>
-
-      <section id="orcamento" className="site-quote-section">
-        <div className="site-quote-copy">
-          <p className="site-kicker">
-            <Sparkles size={18} aria-hidden="true" />
-            Simulador de projeto
-          </p>
-          <h2>Simule seu sistema e envie o pedido direto para a JV.</h2>
-          <p>
-            Esse valor e uma estimativa inicial. Nossa equipe analisa sua necessidade e retorna
-            com uma proposta personalizada pelo seu canal de contato.
-          </p>
-          <p className="site-quote-note">
-            Sistemas ja consideram cadastro, painel, vendas/controle principal e relatorios
-            basicos. Marque apenas recursos extras fora do pacote comum.
-          </p>
-          <div className="site-estimate-box">
-            <span>Estimativa inicial</span>
-            <strong>
-              A partir de{' '}
-              {estimate.toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                maximumFractionDigits: 0,
-              })}
-            </strong>
-          </div>
-        </div>
-
+      <section id="metodo" className="jv-method jv-section"><div><p className="jv-eyebrow">02 — NOSSO PROCESSO</p><h2>Gente que entende.<br/><span>Código que resolve.</span></h2><p>Você participa das decisões. A gente cuida da tecnologia e mantém a conversa clara, do primeiro alinhamento à evolução do sistema.</p><a className="jv-text-link" href="https://wa.me/5592991166859" target="_blank" rel="noreferrer">Fale direto com a JV <ArrowUpRight size={18}/></a></div><ol>{[
+          ['Escutar antes de programar','Conhecemos sua rotina, os gargalos e o que você quer alcançar.'],
+          ['Desenhar o caminho','Alinhamos escopo, telas e prioridades para construir uma solução com direção.'],
+          ['Desenvolver e acompanhar','Implementamos, orientamos o uso e acompanhamos os próximos passos.']
+        ].map(([title,text],index)=><li key={title}><span>0{index+1}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}</ol></section>
+      <section id="orcamento" className="jv-quote jv-section"><div className="jv-quote-copy"><p className="jv-eyebrow">03 — SEU PRÓXIMO PROJETO</p><h2>Uma boa ideia.<br/><span>Vamos começar?</span></h2><p>Conte o que sua empresa precisa. Simule uma estimativa e converse com a gente para definir o escopo.</p><div className="jv-estimate"><span>ESTIMATIVA INICIAL / A PARTIR DE</span><strong>{estimate.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})}</strong><p>Valor indicativo. A proposta final depende do escopo, das integrações e das necessidades do projeto.</p></div><a className="jv-text-link" href="https://wa.me/5592991166859" target="_blank" rel="noreferrer">Prefere conversar primeiro? <ArrowUpRight size={18}/></a></div>
         <form className="site-quote-form" onSubmit={handleQuoteSubmit}>
           <div className="site-form-grid">
             <label>
@@ -353,7 +175,7 @@ export default function Home() {
                 required
                 value={form.phone}
                 onChange={(event) => setForm({ ...form, phone: event.target.value })}
-                placeholder="(92) 99116-6859"
+                type="tel" placeholder="(92) 99116-6859"
               />
             </label>
             <label>
@@ -400,12 +222,13 @@ export default function Home() {
             </label>
           </div>
 
-          <p className="site-form-section-label">Extras opcionais</p>
-          <div className="site-feature-picker" aria-label="Extras opcionais">
+          <p className="site-form-section-label">Recursos adicionais</p>
+          <div className="site-feature-picker" aria-label="Recursos adicionais">
             {featureOptions.map((feature) => (
               <button
                 type="button"
                 key={feature.id}
+                aria-pressed={selectedFeatures.includes(feature.id)}
                 className={selectedFeatures.includes(feature.id) ? 'active' : ''}
                 onClick={() => toggleFeature(feature.id)}
               >
@@ -432,93 +255,11 @@ export default function Home() {
             <p className="site-form-success">Pedido recebido. Em breve a JV Sistemas entra em contato.</p>
           )}
           {quoteStatus === 'error' && (
-            <p className="site-form-error">Nao foi possivel enviar agora. Confira a API e tente novamente.</p>
+            <p className="site-form-error">Não foi possível enviar agora. Tente novamente ou fale pelo link de WhatsApp ao lado.</p>
           )}
         </form>
       </section>
-
-      <section className="site-client-section">
-        <div className="site-client-copy">
-          <p className="site-kicker">Atendimento personalizado</p>
-          <h2>Da primeira ideia ao sistema pronto para sua empresa usar.</h2>
-          <p>
-            A JV Sistemas entende sua rotina, identifica o que precisa ser automatizado e cria
-            uma solucao sob medida para sua operacao crescer com mais controle.
-          </p>
-        </div>
-        <div className="site-client-grid">
-          <Link href="#orcamento" className="site-client-card">
-            <Sparkles size={28} aria-hidden="true" />
-            <strong>Diagnostico inicial</strong>
-            <span>Voce envia sua ideia e recebe uma avaliacao clara do melhor caminho.</span>
-          </Link>
-          <a className="site-client-card" href="https://wa.me/5592991166859" target="_blank" rel="noreferrer">
-            <LifeBuoy size={28} aria-hidden="true" />
-            <strong>Contato direto</strong>
-            <span>Atendimento pelo WhatsApp para tirar duvidas e alinhar detalhes.</span>
-          </a>
-          <a
-            className="site-client-card"
-            href="https://www.instagram.com/jvsistemas.br?igsh=MWFpMzY3dzcydXRqOA=="
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Instagram size={28} aria-hidden="true" />
-            <strong>Instagram</strong>
-            <span>Acompanhe novidades, projetos e solucoes da JV Sistemas.</span>
-          </a>
-        </div>
-      </section>
-
-      <section id="suporte" className="site-process-section">
-        <div>
-          <p className="site-kicker">Metodo JV</p>
-          <h2>Do primeiro contato ao sistema rodando.</h2>
-        </div>
-        <div className="site-process-list">
-          {workflow.map((item, index) => (
-            <article className="site-process-item" key={item}>
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              <p>{item}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="site-final-cta">
-        <PackageCheck size={34} aria-hidden="true" />
-        <h2>Vamos criar juntos a solucao ideal para sua empresa.</h2>
-        <Link className="site-primary-cta" href="#orcamento">
-          Simular projeto
-          <ArrowRight size={18} aria-hidden="true" />
-        </Link>
-      </section>
-
-      <footer className="site-footer">
-        <div className="site-footer-brand">
-          <img src="/jv-sistemas-logo-transparent.png" alt="JV Sistemas & Tecnologia" />
-          <div>
-            <strong>JV Sistemas & Tecnologia</strong>
-            <span>Solucoes inteligentes para o seu negocio.</span>
-          </div>
-        </div>
-        <div className="site-footer-links">
-          <Link href="#orcamento">Orcamento</Link>
-          <a href="https://wa.me/5592991166859" target="_blank" rel="noreferrer">
-            WhatsApp
-          </a>
-          <a
-            href="https://www.instagram.com/jvsistemas.br?igsh=MWFpMzY3dzcydXRqOA=="
-            target="_blank"
-            rel="noreferrer"
-          >
-            Instagram
-          </a>
-          <Link href="/login" aria-label="Acesso administrativo JV Sistemas">
-            Acesso JV
-          </Link>
-        </div>
-      </footer>
+      <footer className="jv-footer"><div className="jv-footer-top"><p>Seu negócio tem um próximo nível.<br/><a href="#orcamento">Vamos construir. <ArrowUpRight/></a></p><a href="https://www.instagram.com/jvsistemas.br" target="_blank" rel="noreferrer" aria-label="Instagram da JV Sistemas"><Instagram size={22}/></a></div><div className="jv-footer-bottom"><span>© {new Date().getFullYear()} JV Sistemas & Tecnologia</span><span>TECNOLOGIA FEITA PARA A SUA REALIDADE.</span><Link href="/login">Acesso JV ↗</Link></div></footer>
     </main>
   )
 }
