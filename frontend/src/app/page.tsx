@@ -6,6 +6,7 @@ import { ArrowRight, ArrowUpRight, Instagram, Menu, X } from 'lucide-react'
 import './public-site.css'
 import PlanetIntro from '@/components/planet-intro'
 import BuildText from '@/components/build-text'
+import TerminalBuild from '@/components/terminal-build'
 
 const featureOptions = [
   { id: 'mobile', label: 'Aplicativo mobile', value: 400 },
@@ -55,18 +56,6 @@ export default function Home() {
   useEffect(() => { setHeroPhase(current => current === 'static' ? 'waiting' : current) }, [])
   const [quoteStep, setQuoteStep] = useState(1)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [lineCount, setLineCount] = useState(0)
-  useEffect(() => {
-    if (!terminalReady || heroPhase === 'static') return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setLineCount(6); return }
-    let count = 0
-    const timer = window.setInterval(() => {
-      count += 1
-      setLineCount(count)
-      if (count === 6) window.clearInterval(timer)
-    }, 650)
-    return () => window.clearInterval(timer)
-  }, [terminalReady, heroPhase])
   const [form, setForm] = useState({
     name: '',
     companyName: '',
@@ -163,10 +152,8 @@ export default function Home() {
         </div>
         <div className="jv-terminal" data-ready={terminalReady} aria-hidden={!terminalReady} aria-label="Animação ilustrativa de desenvolvimento de software">
           <div className="jv-terminal-bar"><span><i/><i/><i/></span><span>jv / seu-proximo-projeto</span><span>⌘</span></div>
-          <div className="jv-terminal-body"><p className="jv-terminal-comment">// A sua operação. A nossa próxima linha de código.</p>
-            <pre><span className="jv-purple">const</span> projeto = {'{'}{'\n'}  empresa: <span className="jv-green">"a sua"</span>,{'\n'}  solução: <span className="jv-green">"sob medida"</span>,{'\n'}  possibilidades: <span className="jv-blue">Infinity</span>{'\n'}{'}'};</pre>
-            <div className="jv-terminal-output" aria-hidden="true">{['$ jv iniciar --projeto', '> Entendendo a sua operação...', '> Conectando processos e pessoas...', '> Desenvolvendo novas possibilidades...', 'OK Pronto para o próximo passo.', '$ vamos construir juntos_'].slice(0,lineCount).map((line,index)=><p className={index===4 ? 'jv-green' : ''} key={line}>{line}</p>)}</div>
-          </div><div className="jv-terminal-footer"><span><i/> CONCEITO DE DESENVOLVIMENTO</span><span>UTF-8 / BR</span></div>
+          <TerminalBuild active={terminalReady && heroPhase === 'running'} />
+          <div className="jv-terminal-footer"><span><i/> CONCEITO DE DESENVOLVIMENTO</span><span>UTF-8 / BR</span></div>
         </div>
         <div className="jv-hero-bottom"><span>DESENVOLVIMENTO COM PROPÓSITO</span><a href="#solucoes">Explore as possibilidades ↓</a><span>MANAUS · PORTO ALEGRE · BRASIL</span></div>
       </section>
