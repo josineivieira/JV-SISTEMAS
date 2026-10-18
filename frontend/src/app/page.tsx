@@ -37,13 +37,27 @@ const urgencyLabels: Record<string, string> = {
 
 export default function Home() {
   const [heroPhase, setHeroPhase] = useState<'static' | 'waiting' | 'running'>('static')
+  const [heroElapsed, setHeroElapsed] = useState(0)
+  const textElapsed = heroPhase === 'static' ? Infinity : heroElapsed
+  const terminalReady = heroPhase === 'static' || (heroPhase === 'running' && heroElapsed >= 3900)
+  useEffect(() => {
+    if (heroPhase !== 'running') return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setHeroElapsed(3900); return }
+    const started = performance.now()
+    const timer = window.setInterval(() => {
+      const elapsed = Math.min(3900, performance.now() - started)
+      setHeroElapsed(elapsed)
+      if (elapsed === 3900) window.clearInterval(timer)
+    }, 32)
+    return () => window.clearInterval(timer)
+  }, [heroPhase])
   const startHero = useCallback(() => setHeroPhase('running'), [])
   useEffect(() => { setHeroPhase(current => current === 'static' ? 'waiting' : current) }, [])
   const [quoteStep, setQuoteStep] = useState(1)
   const [menuOpen, setMenuOpen] = useState(false)
   const [lineCount, setLineCount] = useState(0)
   useEffect(() => {
-    if (heroPhase !== 'running') return
+    if (!terminalReady || heroPhase === 'static') return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setLineCount(6); return }
     let count = 0
     const timer = window.setInterval(() => {
@@ -52,7 +66,7 @@ export default function Home() {
       if (count === 6) window.clearInterval(timer)
     }, 650)
     return () => window.clearInterval(timer)
-  }, [heroPhase])
+  }, [terminalReady, heroPhase])
   const [form, setForm] = useState({
     name: '',
     companyName: '',
@@ -142,12 +156,12 @@ export default function Home() {
       </header>
       <section className="jv-hero">
         <div className="jv-grid-art" aria-hidden="true"><span>01 / ENGINEERING</span><span>JV_SYSTEMS :: BUILDING</span></div>
-        <div className="jv-hero-copy"><p className="jv-eyebrow"><i/> <BuildText text="SOFTWARE SOB MEDIDA. NEGÓCIOS EM MOVIMENTO." speed={12} /></p>
-          <h1><BuildText text="Seu próximo" delay={650} speed={35}/><br/><BuildText text="nível começa" delay={1035} speed={35}/><br/><BuildText text="com " delay={1490} speed={35}/><em><BuildText text="código." delay={1630} speed={35}/></em><span className="jv-cursor" aria-hidden="true">_</span></h1>
-          <p className="jv-intro"><BuildText text="Transformamos processos complexos em sistemas que fazem sentido. Sites, aplicativos e software feitos para a realidade da sua empresa." delay={2100} speed={12}/></p>
+        <div className="jv-hero-copy"><p className="jv-eyebrow"><i/> <BuildText elapsed={textElapsed} text="SOFTWARE SOB MEDIDA. NEGÓCIOS EM MOVIMENTO." speed={12} /></p>
+          <h1><BuildText elapsed={textElapsed} text="Seu próximo" delay={650} speed={35}/><br/><BuildText elapsed={textElapsed} text="nível começa" delay={1035} speed={35}/><br/><BuildText elapsed={textElapsed} text="com " delay={1490} speed={35}/><em><BuildText elapsed={textElapsed} text="código." delay={1630} speed={35}/></em><span className="jv-cursor" aria-hidden="true">_</span></h1>
+          <p className="jv-intro"><BuildText elapsed={textElapsed} text="Transformamos processos complexos em sistemas que fazem sentido. Sites, aplicativos e software feitos para a realidade da sua empresa." delay={2100} speed={12}/></p>
           <a className="jv-button" href="#orcamento">Tirar meu projeto do papel <ArrowUpRight size={20}/></a>
         </div>
-        <div className="jv-terminal" aria-label="Animação ilustrativa de desenvolvimento de software">
+        <div className="jv-terminal" data-ready={terminalReady} aria-hidden={!terminalReady} aria-label="Animação ilustrativa de desenvolvimento de software">
           <div className="jv-terminal-bar"><span><i/><i/><i/></span><span>jv / seu-proximo-projeto</span><span>⌘</span></div>
           <div className="jv-terminal-body"><p className="jv-terminal-comment">// A sua operação. A nossa próxima linha de código.</p>
             <pre><span className="jv-purple">const</span> projeto = {'{'}{'\n'}  empresa: <span className="jv-green">"a sua"</span>,{'\n'}  solução: <span className="jv-green">"sob medida"</span>,{'\n'}  possibilidades: <span className="jv-blue">Infinity</span>{'\n'}{'}'};</pre>

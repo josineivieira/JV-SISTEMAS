@@ -13,9 +13,7 @@ export default function PlanetIntro({ onComplete }: { onComplete: () => void }) 
     setVisible(true)
     const finish = () => { setVisible(false); onComplete() }
     const timer = window.setTimeout(finish, 2600)
-    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') finish() }
-    window.addEventListener('keydown', escape)
-    return () => { clearTimeout(timer); window.removeEventListener('keydown', escape) }
+    return () => clearTimeout(timer)
   }, [onComplete])
 
   useEffect(() => {
@@ -79,7 +77,6 @@ export default function PlanetIntro({ onComplete }: { onComplete: () => void }) 
 
   if (!visible) return null
   return <div className="jv-intro-overlay" role="region" aria-label="Abertura JV Sistemas">
-    <button type="button" className="jv-intro-skip" onClick={() => { setVisible(false); onComplete() }}>Pular abertura ↗</button>
     <div className="jv-intro-content"><span className="jv-intro-caption">TECNOLOGIA QUE CONECTA POSSIBILIDADES</span>
       <canvas ref={canvasRef} aria-hidden="true" />
       <div className="jv-intro-brand"><img src="/jv-sistemas-mark-transparent.png" alt="" /><span>JV SISTEMAS<small>& TECNOLOGIA</small></span></div>
