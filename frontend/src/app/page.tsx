@@ -7,22 +7,22 @@ import './public-site.css'
 import PlanetIntro from '@/components/planet-intro'
 
 const featureOptions = [
-  { id: 'mobile', label: 'Aplicativo mobile', value: 3500 },
-  { id: 'integrations', label: 'Integrações externas', value: 2500 },
-  { id: 'multi_company', label: 'Multiempresa', value: 1800 },
-  { id: 'subscription', label: 'Assinaturas/mensalidades', value: 1800 },
-  { id: 'fiscal', label: 'Nota fiscal/pagamentos', value: 3000 },
-  { id: 'advanced_reports', label: 'Relatórios avançados', value: 1200 },
+  { id: 'mobile', label: 'Aplicativo mobile', value: 400 },
+  { id: 'integrations', label: 'Integrações externas', value: 400 },
+  { id: 'multi_company', label: 'Multiempresa', value: 400 },
+  { id: 'subscription', label: 'Assinaturas/mensalidades', value: 400 },
+  { id: 'fiscal', label: 'Nota fiscal/pagamentos', value: 400 },
+  { id: 'advanced_reports', label: 'Relatórios avançados', value: 400 },
 ]
 
 const projectTypes = {
-  site: { label: 'Site profissional', base: 500 },
+  site: { label: 'Site profissional', base: 400 },
   landing: { label: 'Landing page de vendas', base: 400 },
   essential_system: { label: 'Sistema essencial', base: 400 },
   complete_system: { label: 'Sistema completo para empresa', base: 400 },
-  ecommerce: { label: 'Loja virtual', base: 5500 },
-  app: { label: 'Aplicativo sob medida', base: 12000 },
-  automation: { label: 'Automação de processo', base: 2800 },
+  ecommerce: { label: 'Loja virtual', base: 400 },
+  app: { label: 'Aplicativo sob medida', base: 400 },
+  automation: { label: 'Automação de processo', base: 400 },
 }
 
 const whatsappNumber = '5592991166859'
@@ -62,7 +62,7 @@ export default function Home() {
       .filter((feature) => selectedFeatures.includes(feature.id))
       .reduce((total, feature) => total + feature.value, 0)
 
-    return (project?.base || 2500) + extras
+    return (project?.base || 400) + extras
   }, [form.projectType, selectedFeatures])
 
   const toggleFeature = (featureId: string) => {

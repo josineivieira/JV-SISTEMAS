@@ -1,28 +1,28 @@
 const { Lead, Company, Project } = require('../models');
 
 const projectBaseValues = {
-  site: 500,
+  site: 400,
   landing: 400,
   essential_system: 400,
   complete_system: 400,
   system: 400,
-  ecommerce: 5500,
-  app: 12000,
-  automation: 2800
+  ecommerce: 400,
+  app: 400,
+  automation: 400
 };
 
 const featureValues = {
-  mobile: 3500,
-  integrations: 2500,
-  multi_company: 1800,
-  subscription: 1800,
-  fiscal: 3000,
-  advanced_reports: 1200,
-  brand: 800
+  mobile: 400,
+  integrations: 400,
+  multi_company: 400,
+  subscription: 400,
+  fiscal: 400,
+  advanced_reports: 400,
+  brand: 400
 };
 
 function estimateValue(projectType, features = []) {
-  const base = projectBaseValues[projectType] || 2500;
+  const base = projectBaseValues[projectType] || 400;
   const extras = features.reduce((total, feature) => total + (featureValues[feature] || 0), 0);
   return base + extras;
 }

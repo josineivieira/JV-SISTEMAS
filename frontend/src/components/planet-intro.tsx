@@ -10,10 +10,6 @@ export default function PlanetIntro() {
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
     if (reduced.matches) return
-    try {
-      if (sessionStorage.getItem('jv-intro-seen')) return
-      sessionStorage.setItem('jv-intro-seen', '1')
-    } catch { /* The animation also works with storage disabled. */ }
     setVisible(true)
     const timer = window.setTimeout(() => setVisible(false), 2600)
     const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') setVisible(false) }
@@ -61,19 +57,19 @@ export default function PlanetIntro() {
       const rotation = frame * 0.006 + 0.6
       const radius = 183
       const glow = context.createRadialGradient(260, 260, 140, 260, 260, 225)
-      glow.addColorStop(0, '#78efb000'); glow.addColorStop(0.65, '#78efb00c'); glow.addColorStop(1, '#78efb000')
+      glow.addColorStop(0, '#159fff00'); glow.addColorStop(0.65, '#159fff0c'); glow.addColorStop(1, '#159fff00')
       context.fillStyle = glow; context.fillRect(0, 0, size, size)
-      context.strokeStyle = '#78efb02a'; context.lineWidth = 0.7
+      context.strokeStyle = '#159fff2a'; context.lineWidth = 0.7
       context.beginPath(); context.ellipse(260,260,230,65,-0.38,0,Math.PI*2); context.stroke()
       for (const point of points) {
         const z = Math.cos(point.lat) * Math.cos(point.lon + rotation)
         if (z < 0) continue
         const x = Math.cos(point.lat) * Math.sin(point.lon + rotation)
         const y = Math.sin(point.lat)
-        context.fillStyle = point.land ? `rgba(120,239,176,${0.3 + z * 0.7})` : `rgba(103,156,178,${0.06 + z * 0.14})`
+        context.fillStyle = point.land ? `rgba(21,159,255,${0.3 + z * 0.7})` : `rgba(73,142,201,${0.06 + z * 0.14})`
         context.beginPath(); context.arc(260 + x * radius, 260 - y * radius, point.land ? 1.65 : 0.65, 0, Math.PI * 2); context.fill()
       }
-      context.strokeStyle = '#78efb040'; context.beginPath(); context.arc(260,260,radius,0,Math.PI*2); context.stroke()
+      context.strokeStyle = '#159fff40'; context.beginPath(); context.arc(260,260,radius,0,Math.PI*2); context.stroke()
       frame++; animation = requestAnimationFrame(draw)
     }
     draw()
