@@ -4,24 +4,25 @@ import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowRight, ArrowUpRight, Instagram, Menu, X } from 'lucide-react'
 import './public-site.css'
+import PlanetIntro from '@/components/planet-intro'
 
 const featureOptions = [
   { id: 'mobile', label: 'Aplicativo mobile', value: 3500 },
-  { id: 'integrations', label: 'Integracoes externas', value: 2500 },
+  { id: 'integrations', label: 'Integrações externas', value: 2500 },
   { id: 'multi_company', label: 'Multiempresa', value: 1800 },
   { id: 'subscription', label: 'Assinaturas/mensalidades', value: 1800 },
   { id: 'fiscal', label: 'Nota fiscal/pagamentos', value: 3000 },
-  { id: 'advanced_reports', label: 'Relatorios avancados', value: 1200 },
+  { id: 'advanced_reports', label: 'Relatórios avançados', value: 1200 },
 ]
 
 const projectTypes = {
   site: { label: 'Site profissional', base: 500 },
   landing: { label: 'Landing page de vendas', base: 400 },
-  essential_system: { label: 'Sistema essencial', base: 4500 },
-  complete_system: { label: 'Sistema completo para empresa', base: 7500 },
+  essential_system: { label: 'Sistema essencial', base: 400 },
+  complete_system: { label: 'Sistema completo para empresa', base: 400 },
   ecommerce: { label: 'Loja virtual', base: 5500 },
   app: { label: 'Aplicativo sob medida', base: 12000 },
-  automation: { label: 'Automacao de processo', base: 2800 },
+  automation: { label: 'Automação de processo', base: 2800 },
 }
 
 const whatsappNumber = '5592991166859'
@@ -34,6 +35,7 @@ const urgencyLabels: Record<string, string> = {
 }
 
 export default function Home() {
+  const [quoteStep, setQuoteStep] = useState(1)
   const [menuOpen, setMenuOpen] = useState(false)
   const [lineCount, setLineCount] = useState(0)
   useEffect(() => {
@@ -46,7 +48,7 @@ export default function Home() {
     companyName: '',
     phone: '',
     email: '',
-    projectType: 'complete_system',
+    projectType: 'essential_system',
     budgetRange: 'a-definir',
     urgency: '30-60-dias',
     message: '',
@@ -120,6 +122,7 @@ export default function Home() {
 
   return (
     <main className="jv-public">
+      <PlanetIntro />
       <header className="jv-header">
         <Link href="/" className="jv-brand" aria-label="JV Sistemas & Tecnologia — início"><img src="/jv-sistemas-mark-transparent.png" alt="" /><span>JV SISTEMAS<small>& TECNOLOGIA</small></span></Link>
         <button className="jv-menu" type="button" aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'} aria-expanded={menuOpen} aria-controls="public-navigation" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
@@ -141,7 +144,7 @@ export default function Home() {
             <div className="jv-terminal-output" aria-hidden="true">{['$ jv iniciar --projeto', '> Entendendo a sua operação...', '> Conectando processos e pessoas...', '> Desenvolvendo novas possibilidades...', 'OK Pronto para o próximo passo.', '$ vamos construir juntos_'].slice(0,lineCount).map((line,index)=><p className={index===4 ? 'jv-green' : ''} key={line}>{line}</p>)}</div>
           </div><div className="jv-terminal-footer"><span><i/> CONCEITO DE DESENVOLVIMENTO</span><span>UTF-8 / BR</span></div>
         </div>
-        <div className="jv-hero-bottom"><span>DESENVOLVIMENTO COM PROPÓSITO</span><a href="#solucoes">Explore as possibilidades ↓</a><span>MANAUS — BRASIL</span></div>
+        <div className="jv-hero-bottom"><span>DESENVOLVIMENTO COM PROPÓSITO</span><a href="#solucoes">Explore as possibilidades ↓</a><span>MANAUS · PORTO ALEGRE · BRASIL</span></div>
       </section>
       <div className="jv-stack" aria-label="Áreas de atuação"><span>WEB DEVELOPMENT</span><b>/</b><span>SISTEMAS DE GESTÃO</span><b>/</b><span>APLICATIVOS</span><b>/</b><span>AUTOMAÇÃO</span></div>
       <section className="jv-section" id="solucoes"><div className="jv-section-head"><p className="jv-eyebrow">01 — O QUE FAZEMOS</p><h2>Menos tarefas manuais.<br/><span>Mais espaço para crescer.</span></h2><p>Da presença digital ao controle da operação, desenvolvemos a tecnologia que acompanha o seu negócio.</p></div>
@@ -157,8 +160,40 @@ export default function Home() {
           ['Desenhar o caminho','Alinhamos escopo, telas e prioridades para construir uma solução com direção.'],
           ['Desenvolver e acompanhar','Implementamos, orientamos o uso e acompanhamos os próximos passos.']
         ].map(([title,text],index)=><li key={title}><span>0{index+1}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}</ol></section>
-      <section id="orcamento" className="jv-quote jv-section"><div className="jv-quote-copy"><p className="jv-eyebrow">03 — SEU PRÓXIMO PROJETO</p><h2>Uma boa ideia.<br/><span>Vamos começar?</span></h2><p>Conte o que sua empresa precisa. Simule uma estimativa e converse com a gente para definir o escopo.</p><div className="jv-estimate"><span>ESTIMATIVA INICIAL / A PARTIR DE</span><strong>{estimate.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})}</strong><p>Valor indicativo. A proposta final depende do escopo, das integrações e das necessidades do projeto.</p></div><a className="jv-text-link" href="https://wa.me/5592991166859" target="_blank" rel="noreferrer">Prefere conversar primeiro? <ArrowUpRight size={18}/></a></div>
-        <form className="site-quote-form" onSubmit={handleQuoteSubmit}>
+      <section id="orcamento" className="jv-quote jv-section"><div className="jv-quote-copy"><p className="jv-eyebrow">03 — SEU PRÓXIMO PROJETO</p><h2>Uma boa ideia.<br/><span>Vamos começar?</span></h2><p>Conte o que sua empresa precisa. Sistemas a partir de R$ 400. Escolha o ponto de partida e conte o que precisa: o escopo final é definido junto com você.</p><div className="jv-estimate"><span>SEU PONTO DE PARTIDA / A PARTIR DE</span><strong>{estimate.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})}</strong><p>R$ 400 é o valor inicial para sistemas com escopo de entrada. Recursos adicionais alteram a estimativa. A proposta final depende da análise do projeto.</p></div><a className="jv-text-link" href="https://wa.me/5592991166859" target="_blank" rel="noreferrer">Prefere conversar primeiro? <ArrowUpRight size={18}/></a></div>
+        <form className="site-quote-form jv-brief" onSubmit={handleQuoteSubmit}>
+          <div className="jv-brief-progress" aria-label={`Etapa ${quoteStep} de 2`}><span className={quoteStep === 1 ? 'current' : 'done'}>01 / SEU PROJETO</span><span className={quoteStep === 2 ? 'current' : ''}>02 / VAMOS CONVERSAR</span></div>
+          {quoteStep === 1 ? <div className="jv-brief-stage">
+            <h3>O que vamos construir?</h3><p className="jv-brief-hint">Escolha uma direção. Os detalhes a gente resolve juntos.</p>
+            <div className="jv-project-picker" role="group" aria-label="Tipo de projeto">{Object.entries(projectTypes).map(([value, project]) => <button key={value} type="button" aria-pressed={form.projectType === value} className={form.projectType === value ? 'selected' : ''} onClick={() => setForm({...form, projectType: value})}><span>{project.label}</span><small>A partir de {project.base.toLocaleString('pt-BR', {style:'currency',currency:'BRL',maximumFractionDigits:0})}</small><ArrowUpRight size={16}/></button>)}</div>
+          <p className="site-form-section-label">Recursos adicionais</p>
+          <div className="site-feature-picker" aria-label="Recursos adicionais">
+            {featureOptions.map((feature) => (
+              <button
+                type="button"
+                key={feature.id}
+                aria-pressed={selectedFeatures.includes(feature.id)}
+                className={selectedFeatures.includes(feature.id) ? 'active' : ''}
+                onClick={() => toggleFeature(feature.id)}
+              >
+                {feature.label}<small> + {feature.value.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0})}</small>
+              </button>
+            ))}
+          </div>
+
+          <label>
+            Descreva sua ideia
+            <textarea
+              value={form.message}
+              onChange={(event) => setForm({ ...form, message: event.target.value })}
+              placeholder="Ex: preciso controlar vendas, clientes, mensalidades, contratos e chamados..."
+            />
+          </label>
+
+
+            <button className="site-primary-cta site-submit-quote" type="button" onClick={() => setQuoteStep(2)}>Continuar para contato <ArrowRight size={18}/></button>
+          </div> : <div className="jv-brief-stage">
+            <h3>Como podemos falar com você?</h3><p className="jv-brief-hint">Seu projeto: {projectTypes[form.projectType as keyof typeof projectTypes].label}. Vamos alinhar o escopo pelo WhatsApp.</p>
           <div className="site-form-grid">
             <label>
               Nome
@@ -196,19 +231,6 @@ export default function Home() {
               />
             </label>
             <label>
-              Tipo de projeto
-              <select
-                value={form.projectType}
-                onChange={(event) => setForm({ ...form, projectType: event.target.value })}
-              >
-                {Object.entries(projectTypes).map(([value, project]) => (
-                  <option key={value} value={value}>
-                    {project.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
               Prazo desejado
               <select
                 value={form.urgency}
@@ -222,41 +244,16 @@ export default function Home() {
             </label>
           </div>
 
-          <p className="site-form-section-label">Recursos adicionais</p>
-          <div className="site-feature-picker" aria-label="Recursos adicionais">
-            {featureOptions.map((feature) => (
-              <button
-                type="button"
-                key={feature.id}
-                aria-pressed={selectedFeatures.includes(feature.id)}
-                className={selectedFeatures.includes(feature.id) ? 'active' : ''}
-                onClick={() => toggleFeature(feature.id)}
-              >
-                {feature.label}
-              </button>
-            ))}
-          </div>
 
-          <label>
-            Descreva sua ideia
-            <textarea
-              value={form.message}
-              onChange={(event) => setForm({ ...form, message: event.target.value })}
-              placeholder="Ex: preciso controlar vendas, clientes, mensalidades, contratos e chamados..."
-            />
-          </label>
-
-          <button className="site-primary-cta site-submit-quote" type="submit" disabled={quoteStatus === 'sending'}>
-            {quoteStatus === 'sending' ? 'Enviando...' : 'Enviar pelo WhatsApp'}
-            <ArrowRight size={18} aria-hidden="true" />
-          </button>
-
+            <div className="jv-brief-actions"><button type="button" className="jv-back" onClick={() => setQuoteStep(1)}>← Voltar</button><button className="site-primary-cta site-submit-quote" type="submit" disabled={quoteStatus === 'sending'}>{quoteStatus === 'sending' ? 'Enviando...' : 'Conversar sobre meu projeto'}<ArrowUpRight size={18}/></button></div>
+            <p className="jv-brief-privacy">Usaremos seus dados apenas para responder ao seu pedido. Esta simulação não gera cobrança nem compromisso de contratação.</p>
           {quoteStatus === 'success' && (
             <p className="site-form-success">Pedido recebido. Em breve a JV Sistemas entra em contato.</p>
           )}
           {quoteStatus === 'error' && (
             <p className="site-form-error">Não foi possível enviar agora. Tente novamente ou fale pelo link de WhatsApp ao lado.</p>
           )}
+          </div>}
         </form>
       </section>
       <footer className="jv-footer"><div className="jv-footer-top"><p>Seu negócio tem um próximo nível.<br/><a href="#orcamento">Vamos construir. <ArrowUpRight/></a></p><a href="https://www.instagram.com/jvsistemas.br" target="_blank" rel="noreferrer" aria-label="Instagram da JV Sistemas"><Instagram size={22}/></a></div><div className="jv-footer-bottom"><span>© {new Date().getFullYear()} JV Sistemas & Tecnologia</span><span>TECNOLOGIA FEITA PARA A SUA REALIDADE.</span><Link href="/login">Acesso JV ↗</Link></div></footer>

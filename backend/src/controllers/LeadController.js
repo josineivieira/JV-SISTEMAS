@@ -1,11 +1,11 @@
 const { Lead, Company, Project } = require('../models');
 
 const projectBaseValues = {
-  site: 1800,
-  landing: 1200,
-  essential_system: 4500,
-  complete_system: 7500,
-  system: 7500,
+  site: 500,
+  landing: 400,
+  essential_system: 400,
+  complete_system: 400,
+  system: 400,
   ecommerce: 5500,
   app: 12000,
   automation: 2800
