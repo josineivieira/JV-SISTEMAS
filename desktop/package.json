@@ -1,0 +1,56 @@
+{
+  "name": "jv-sistemas-erp-desktop",
+  "version": "1.0.0",
+  "description": "JV Sistemas ERP Logistico desktop.",
+  "author": "JV Sistemas & Tecnologia",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "dev": "electron .",
+    "pack": "set CSC_IDENTITY_AUTO_DISCOVERY=false&& electron-builder --dir",
+    "dist": "set CSC_IDENTITY_AUTO_DISCOVERY=false&& electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^30.5.1",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "br.com.jvsistemas.erp.logistico",
+    "productName": "JV Sistemas ERP Logistico",
+    "artifactName": "JV-Sistemas-ERP-Logistico-${version}-${arch}.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "assets/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../frontend/.next/standalone",
+        "to": "frontend"
+      },
+      {
+        "from": "../frontend/.next/static",
+        "to": "frontend/.next/static"
+      },
+      {
+        "from": "../frontend/public",
+        "to": "frontend/public"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/jv-sistemas-logo-transparent.png",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "JV Sistemas ERP Logistico"
+    }
+  }
+}
