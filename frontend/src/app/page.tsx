@@ -173,7 +173,6 @@ export default function Home() {
           <p className="jv-eyebrow">03 — VAMOS CONSTRUIR</p>
           <h2>Seu desafio.<br/><span>Uma solução com direção.</span></h2>
           <p>Conte o que precisa melhorar na sua empresa. A gente entende a operação e prepara uma proposta com escopo, prazo e investimento definidos.</p>
-          <div className="jv-proposal-price"><span>INVESTIMENTO INICIAL</span><p>Projetos a partir de <strong>R$ 400</strong></p><small>Valor para projetos de escopo inicial. A proposta é personalizada conforme as funcionalidades e integrações necessárias.</small></div>
           <div className="jv-proposal-next"><span>DEPOIS DO SEU CONTATO</span><ol><li><b>01</b> Entendemos sua necessidade</li><li><b>02</b> Definimos o escopo e as prioridades</li><li><b>03</b> Apresentamos a proposta para você avaliar</li></ol></div>
           <a className="jv-text-link" href="https://wa.me/5592991166859" target="_blank" rel="noreferrer">Conversar direto pelo WhatsApp <ArrowUpRight size={18}/></a>
         </div>
