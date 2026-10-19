@@ -34,7 +34,7 @@ export default function TerminalBuild({ active }: { active: boolean }) {
   }, [active])
 
   let offset = codeStart
-  return <div className="jv-terminal-body" data-terminal-finished={elapsed >= duration}>
+  return <div className="jv-terminal-body notranslate" translate="no" data-terminal-finished={elapsed >= duration}>
     <p className="jv-terminal-comment"><BuildText text={comment} elapsed={elapsed} speed={12} /></p>
     <pre>{tokens.map((token, index) => {
       const delay = offset
